@@ -67,6 +67,15 @@ Tree::Node<T>* createTree(T arr[], int start, int end)
 }
 
 template <typename T>
+Tree::Node<T>* deleteTree(Tree::Node<T>* node)
+{
+    if(node == nullptr) return;
+    deleteTree(node->left);
+    deleteTree(node->right);
+    delete node;
+}
+
+template <typename T>
 void dfs_in_order(Tree::Node<T>* node)
 {
     if(node == nullptr){
