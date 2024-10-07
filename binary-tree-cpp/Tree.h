@@ -1,4 +1,5 @@
 #include <vector>
+#include <queue>
 
 namespace Tree
 {
@@ -102,6 +103,17 @@ T find_max(Tree::Node<T>* root)
 }
 
 template <typename T>
+int find_height(Tree::Node<T>* node)
+{
+    if(node == nullptr) return 0;
+
+    int left_height = find_height(node->left);
+    int right_height = find_height(node->right);
+
+    return std::max(left_height, right_height) + 1;
+}
+
+template <typename T>
 void dfs_in_order(Tree::Node<T>* node)
 {
     if(node == nullptr){
@@ -132,4 +144,21 @@ void dfs_post_order(Tree::Node<T>* node)
     dfs_post_order(node->left);
     dfs_post_order(node->right);
     std::cout << node->value << " ";
+}
+
+template <typename T>
+void bfs_level_order(Tree::Node<T>* node)
+{
+    if(node == nullptr) return;
+
+    std::queue<Tree::Node<T>> discovered_nodes;
+
+    discovered_nodes.push(node);
+    while(!discovered_nodes.empty()){
+        auto current = discovered_nodes.front();
+        std::cout << current << " ";
+        if(current->left != nullptr) discovered_nodes.push(current->left);
+        if(current->right != nullptr) discovered_nodes.push(current->right);
+        discovered_nodes.pop();
+    }
 }
