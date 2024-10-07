@@ -1,3 +1,5 @@
+#include <vector>
+
 namespace Tree
 {
     template <typename T>
@@ -7,7 +9,40 @@ namespace Tree
         T value;
     };
 }
+template <typename T>
+bool search(Tree::Node<T>* root, T value_param)
+{
+    if(root == nullptr) return false;
+    if(root->value == value_param) return true;
+    else if(value_param < root->value) return search(root->left, value_param);
+    else return search(root->right, value_param);
+}
 
+template <typename T>
+Tree::Node<T>* insert(Tree::Node<T>* root, T value_param)
+{
+    if(root == nullptr){
+        auto newNode = new Tree::Node<T>();
+        newNode->value = value_param;
+        root = newNode;
+    } else if (value_param < root->value){
+        root->left = insert(root->left, value_param);
+    } else {
+        root->right = insert(root->right, value_param);
+    }
+    return root;
+}
+// creates binary search tree
+template <typename T>
+Tree::Node<T>* createTree(Tree::Node<T>* root, const std::vector<T>& values_param)
+{
+    for(const T& value : values_param){
+        root = insert(root, value);
+    }
+    return root;
+}
+
+// creates complete binary tree
 template <typename T>
 Tree::Node<T>* createTree(T arr[], int start, int end)
 {
@@ -63,5 +98,3 @@ void dfs_post_order(Tree::Node<T>* node)
     dfs_post_order(node->right);
     std::cout << node->value << " ";
 }
-
-
