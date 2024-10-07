@@ -34,7 +34,7 @@ Tree::Node<T>* insert(Tree::Node<T>* root, T value_param)
 }
 // creates binary search tree
 template <typename T>
-Tree::Node<T>* createTree(Tree::Node<T>* root, const std::vector<T>& values_param)
+Tree::Node<T>* create_tree(Tree::Node<T>* root, const std::vector<T>& values_param)
 {
     for(const T& value : values_param){
         root = insert(root, value);
@@ -44,7 +44,7 @@ Tree::Node<T>* createTree(Tree::Node<T>* root, const std::vector<T>& values_para
 
 // creates complete binary tree
 template <typename T>
-Tree::Node<T>* createTree(T arr[], int start, int end)
+Tree::Node<T>* create_tree(T arr[], int start, int end)
 {
     if(start >= end){
         return nullptr;
@@ -57,22 +57,48 @@ Tree::Node<T>* createTree(T arr[], int start, int end)
     int right_child_index = 2 * start + 2;
 
     if(left_child_index < end){
-        root->left = createTree<T>(arr, left_child_index, end);
+        root->left = create_tree<T>(arr, left_child_index, end);
     }
     if(right_child_index < end){ 
-        root->right = createTree<T>(arr, right_child_index, end);
+        root->right = create_tree<T>(arr, right_child_index, end);
     }
 
     return root;
 }
 
 template <typename T>
-Tree::Node<T>* deleteTree(Tree::Node<T>* node)
+void delete_tree(Tree::Node<T>* node)
 {
     if(node == nullptr) return;
-    deleteTree(node->left);
-    deleteTree(node->right);
+    delete_tree(node->left);
+    delete_tree(node->right);
     delete node;
+}
+
+template <typename T>
+T find_min(Tree::Node<T>* root)
+{
+    if(root == nullptr){
+        throw std::runtime_error("Tree is empty...");
+    }
+    auto current = root;
+    while(current->left != nullptr){
+        current = current->left;
+    }
+    return current->value;
+}
+
+template <typename T>
+T find_max(Tree::Node<T>* root)
+{
+    if(root == nullptr){
+        throw std::runtime_error("Tree is empty...");
+    }
+    auto current = root;
+    while(current->right != nullptr){
+        current = current->right;
+    }
+    return current->value;
 }
 
 template <typename T>

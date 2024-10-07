@@ -8,12 +8,11 @@ int main()
     //char arr[] = {'a','b','c','d','e'};
     // bool arr[] = {true, false, true, true, false};
     int size = sizeof(arr) / sizeof(arr[1]);
-    // auto root = createTree<int>(arr,0,size);
+    // auto root = create_tree<int>(arr,0,size);
 
     Tree::Node<int>* root = nullptr;
     std::vector<int> values = {6,10,3,5,8,1,9};
-
-    root = createTree(root,values);
+    root = create_tree(root,values);
 
     int input;
     std::cout << "Enter number to be searched: ";
@@ -32,4 +31,12 @@ int main()
     std::cout << "Tree (Post-order traversal) : ";
     dfs_post_order(root);
     std::cout << "\n";
+
+    std::cout << "Minimum value in tree : " << find_min(root) << "\n";
+    std::cout << "Maximum value in tree : " << find_max(root) << "\n";
+
+    delete_tree(root);
+    std::cout << "Tree nodes deleted...\n";
+
+    return 0;
 }
