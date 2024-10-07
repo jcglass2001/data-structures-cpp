@@ -32,6 +32,10 @@ int main()
     dfs_post_order(root);
     std::cout << "\n";
 
+    std::cout << "Tree (Level-order traversal) : ";
+    bfs_level_order(root);
+    std::cout << "\n";
+
     std::cout << "Height of tree : " << find_height(root) << "\n";
     std::cout << "Minimum value in tree : " << find_min(root) << "\n";
     std::cout << "Maximum value in tree : " << find_max(root) << "\n";

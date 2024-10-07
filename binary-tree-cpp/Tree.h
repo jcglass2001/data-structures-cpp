@@ -151,12 +151,12 @@ void bfs_level_order(Tree::Node<T>* node)
 {
     if(node == nullptr) return;
 
-    std::queue<Tree::Node<T>> discovered_nodes;
+    std::queue<Tree::Node<T>*> discovered_nodes;
 
     discovered_nodes.push(node);
     while(!discovered_nodes.empty()){
         auto current = discovered_nodes.front();
-        std::cout << current << " ";
+        std::cout << current->value << " ";
         if(current->left != nullptr) discovered_nodes.push(current->left);
         if(current->right != nullptr) discovered_nodes.push(current->right);
         discovered_nodes.pop();
