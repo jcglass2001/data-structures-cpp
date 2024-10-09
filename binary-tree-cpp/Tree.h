@@ -1,5 +1,6 @@
 #include <vector>
 #include <queue>
+#include <limits>
 
 namespace Tree
 {
@@ -20,25 +21,104 @@ bool search(Tree::Node<T>* root, T value_param)
 }
 
 template <typename T>
-Tree::Node<T>* insert(Tree::Node<T>* root, T value_param)
+bool is_bst_util(Tree::Node<T>* root, T lower_bound, T upper_bound)
+{
+    if(root == nullptr) return true;
+    if(root->value >= lower_bound && root->value <= upper_bound){
+        return is_bst_util(root->left, lower_bound, root->value)
+                && is_bst_util(root->right, root->value, upper_bound);
+    }
+    
+    return false;
+}
+
+template <typename T>
+bool is_bst(Tree::Node<T>* root)
+{
+    return is_bst_util(root, std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
+}
+
+template <typename T>
+Tree::Node<T>* find_min(Tree::Node<T>* root)
+{
+    if(root == nullptr){
+        throw std::runtime_error("Tree is empty...");
+    }
+    auto current = root;
+    while(current->left != nullptr){
+        current = current->left;
+    }
+    return current;
+}
+
+template <typename T>
+Tree::Node<T>* find_max(Tree::Node<T>* root)
+{
+    if(root == nullptr){
+        throw std::runtime_error("Tree is empty...");
+    }
+    auto current = root;
+    while(current->right != nullptr){
+        current = current->right;
+    }
+    return current;
+}
+
+
+template <typename T>
+Tree::Node<T>* insert_node(Tree::Node<T>* root, T value_param)
 {
     if(root == nullptr){
         auto newNode = new Tree::Node<T>();
         newNode->value = value_param;
         root = newNode;
     } else if (value_param < root->value){
-        root->left = insert(root->left, value_param);
+        root->left = insert_node(root->left, value_param);
     } else {
-        root->right = insert(root->right, value_param);
+        root->right = insert_node(root->right, value_param);
     }
     return root;
 }
+
+template <typename T>
+Tree::Node<T>* delete_node(Tree::Node<T>* root, T value_param)
+{
+    if(root == nullptr) return root;
+    else if(value_param < root->value) root->left = delete_node(root->left, value_param);
+    else if(value_param > root->value) root->right = delete_node(root->right, value_param);
+    else {
+        // no child
+        if(root->left == nullptr && root->right == nullptr){
+            delete root;
+            root = nullptr;
+        }
+        // one child
+        else if(root->left == nullptr){
+            auto temp = root;
+            root = root->right;
+            delete temp;
+        }
+        else if(root->right == nullptr){
+            auto temp = root;
+            root = root->left;
+            delete temp;
+        }
+        // two children
+        else {
+            Tree::Node<T>* temp = find_min(root->right);
+            root->value = temp->value;
+            root->right = delete_node(root->right,temp->value);
+        }
+    }
+    return root;
+}
+
 // creates binary search tree
 template <typename T>
 Tree::Node<T>* create_tree(Tree::Node<T>* root, const std::vector<T>& values_param)
 {
     for(const T& value : values_param){
-        root = insert(root, value);
+        root = insert_node(root, value);
     }
     return root;
 }
@@ -74,32 +154,6 @@ void delete_tree(Tree::Node<T>* node)
     delete_tree(node->left);
     delete_tree(node->right);
     delete node;
-}
-
-template <typename T>
-T find_min(Tree::Node<T>* root)
-{
-    if(root == nullptr){
-        throw std::runtime_error("Tree is empty...");
-    }
-    auto current = root;
-    while(current->left != nullptr){
-        current = current->left;
-    }
-    return current->value;
-}
-
-template <typename T>
-T find_max(Tree::Node<T>* root)
-{
-    if(root == nullptr){
-        throw std::runtime_error("Tree is empty...");
-    }
-    auto current = root;
-    while(current->right != nullptr){
-        current = current->right;
-    }
-    return current->value;
 }
 
 template <typename T>

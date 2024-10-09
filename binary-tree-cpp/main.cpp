@@ -2,23 +2,21 @@
 #include <vector>
 #include "Tree.h"
 
+template <typename T>
+void input_search(Tree::Node<T>* root)
+{
+    T input;
+    std::cout << "Enter value to be searched: ";
+    std::cin >> input;
+    if(search(root,input) == true) std::cout << "Value found...\n";
+    else std::cout << "Value not found...\n";
+}
 int main()
 {
-    int arr[] = {1,2,3,4,5,6,7};
-    //char arr[] = {'a','b','c','d','e'};
-    // bool arr[] = {true, false, true, true, false};
-    int size = sizeof(arr) / sizeof(arr[1]);
-    // auto root = create_tree<int>(arr,0,size);
 
     Tree::Node<int>* root = nullptr;
-    std::vector<int> values = {6,10,3,5,8,1,9};
+    std::vector<int> values = {12,5,15,3,7,13,17,1,9,14,20,8,11,18};
     root = create_tree(root,values);
-
-    int input;
-    std::cout << "Enter number to be searched: ";
-    std::cin >> input;
-    if(search(root,input) == true) std::cout << "Found\n";
-    else std::cout << "Not Found\n";
 
     std::cout << "Tree (In-order traversal) : ";
     dfs_in_order(root);
@@ -36,12 +34,21 @@ int main()
     bfs_level_order(root);
     std::cout << "\n";
 
+    std::cout << "Is Binary Search Tree : " << std::boolalpha << is_bst(root) << "\n";
     std::cout << "Height of tree : " << find_height(root) << "\n";
-    std::cout << "Minimum value in tree : " << find_min(root) << "\n";
-    std::cout << "Maximum value in tree : " << find_max(root) << "\n";
+    std::cout << "Minimum value in tree : " << find_min(root)->value << "\n";
+    std::cout << "Maximum value in tree : " << find_max(root)->value << "\n";
+
+    input_search(root);
+
+    delete_node(root, 15);
+
+    std::cout << "Tree after deletion (Level-order traversal) : ";
+    bfs_level_order(root);
+    std::cout << "\n";
 
     delete_tree(root);
-    std::cout << "Tree nodes deleted...\n";
+    std::cout << "Tree nodes deallocated...\n";
 
     return 0;
 }
